@@ -9,23 +9,30 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-
-
 export const TaskManager = () => {
-  const { user } = useUser();
-  const tasks = useQuery(api.tasks.get, { userId: user.id }) || [];
+  const { user, isLoaded } = useUser();
+  const [newTaskName, setNewTaskName] = useState('');
+
+  const tasks = useQuery(api.tasks.get, user?.id ? { userId: user.id } : "skip") || [];
   const addTask = useMutation(api.tasks.add);
   const updateTask = useMutation(api.tasks.update);
   const deleteTask = useMutation(api.tasks.remove);
-  const [newTaskName, setNewTaskName] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newTaskName.trim()) {
+    if (newTaskName.trim() && user?.id) {
       addTask({ name: newTaskName.trim(), userId: user.id });
       setNewTaskName('');
     }
   };
+
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <div>Please sign in to manage tasks.</div>;
+  }
 
   return (
     <Card className="mt-8">
