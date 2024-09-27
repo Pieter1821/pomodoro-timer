@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default function AboutSection() {
+export default function About() {
   return (
     <Card className="mt-8">
       <CardHeader>
