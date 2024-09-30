@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
+
 export const TaskManager = () => {
   const { user, isLoaded } = useUser();
   const [newTaskName, setNewTaskName] = useState('');
@@ -34,6 +35,7 @@ export const TaskManager = () => {
     return <div>Please sign in to manage tasks.</div>;
   }
 
+
   return (
     <Card className="mt-8">
       <CardHeader>
@@ -54,22 +56,31 @@ export const TaskManager = () => {
             Add
           </Button>
         </form>
-        <ul className="space-y-2">
-          {tasks.map((task) => (
-            <li key={task._id} className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                checked={task.completed}
-                onChange={() => updateTask({ id: task._id, completed: !task.completed })}
-                className="rounded text-primary focus:ring-primary"
-              />
-              <span className={task.completed ? 'line-through text-gray-500' : ''}>{task.name}</span>
-              <Button variant="ghost" size="sm" onClick={() => deleteTask({ id: task._id })}>
-                <X className="h-4 w-4" />
-              </Button>
-            </li>
-          ))}
-        </ul>
+        
+<ul className="space-y-2">
+  {tasks.map((task) => (
+    <li key={task._id} className="flex items-center space-x-2">
+      <div className="flex items-center">
+        <input
+          id={`task-${task._id}`}
+          type="checkbox"
+          checked={task.completed}
+          onChange={() => updateTask({ id: task._id, completed: !task.completed })}
+          className="rounded text-primary focus:ring-primary"
+        />
+        <label
+          htmlFor={`task-${task._id}`}
+          className={`ml-2 ${task.completed ? 'line-through text-gray-500' : ''}`}
+        >
+          {task.name}
+        </label>
+      </div>
+      <Button variant="ghost" size="sm" onClick={() => deleteTask({ id: task._id })}>
+        <X className="h-4 w-4" />
+      </Button>
+    </li>
+  ))}
+</ul>
       </CardContent>
     </Card>
   );
